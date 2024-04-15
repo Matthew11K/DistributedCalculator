@@ -46,7 +46,6 @@ type Task struct {
 	Data      []string `json:"data"` // Данные ожидаются как массив строк
 }
 
-// Функция performArithmeticOperation обновлена для работы с массивом строк.
 func performArithmeticOperation(operation string, numbers []string) (string, error) {
 	if len(numbers) != 2 {
 		return "", fmt.Errorf("expected two numbers for operation, got %d", len(numbers))

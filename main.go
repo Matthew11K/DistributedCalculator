@@ -10,6 +10,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 )
 
 var db *sql.DB
@@ -19,7 +20,12 @@ func main() {
 	var err error // Переменная для ошибок
 
 	// Инициализация соединения с базой данных PostgreSQL
-	psqlInfo := "host=localhost port=5432 user=postgres password=12345vu dbname=calculator sslmode=disable"
+	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		os.Getenv("POSTGRES_HOST"),
+		os.Getenv("POSTGRES_PORT"),
+		os.Getenv("POSTGRES_USER"),
+		os.Getenv("POSTGRES_PASSWORD"),
+		os.Getenv("POSTGRES_DB"))
 	db, err = sql.Open("postgres", psqlInfo)
 	if err != nil {
 		log.Fatalf("Ошибка при подключении к базе данных: %v", err)
@@ -33,7 +39,7 @@ func main() {
 	}
 
 	// Инициализация соединения с RabbitMQ
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+	conn, err := amqp.Dial(os.Getenv("AMQP_URL"))
 	if err != nil {
 		log.Fatalf("Failed to connect to RabbitMQ: %v", err)
 	}
